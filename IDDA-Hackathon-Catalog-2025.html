@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDDA - Startup Ecosystem Support Catalog 2025 | Hackathons</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--purple-900:#1a0a3e;--purple-800:#2d1566;--purple-700:#3f1f8e;--purple-600:#5a2dbe;--purple-500:#7c3aed;--purple-400:#9f67ff;--purple-300:#b794f6;--purple-200:#d6bcfa;--purple-100:#ede9fe;--purple-50:#f5f3ff;--accent:#a78bfa;--gold:#fbbf24;--emerald:#10b981;--white:#ffffff;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827}
+body{font-family:'Inter',sans-serif;background:var(--gray-50);color:var(--gray-800);overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--gray-100)}
+::-webkit-scrollbar-thumb{background:var(--purple-300);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--purple-500)}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+@keyframes countUp{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.animate-fade-in{animation:fadeInUp .5s ease forwards}
+.animate-slide-in{animation:slideIn .4s ease forwards}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+// ===== DATA =====
+const hackathons = [
+  {
+    id:1, name:"RASSEP 1st Wave Hackathon", nameAz:"RASSEP 1-ci dalğa hakaton",
+    venue:"Baku Engineering University", venueAz:"Bakı Mühəndislik Universiteti",
+    partner:"Yeni Fikir MMC", coordinator:"Nigar Abdullayeva",
+    date:"15-16.02.2025", category:"tech", region:"Baku",
+    desc:"1st wave hackathon focused on cybersecurity, green energy, digital education, and sustainable investments.",
+    descAz:"Kibertəhlükəsizlik, yaşıl enerji, təhsildə rəqəmsallaşma, yaşıl maliyyə mövzusunda 1-ci dalğa hakaton.",
+    budget:{amount:14350,currency:"AZN"},
+    stats:{applicants:76,selected:23,participants:23,winners:3},
+    topics:["Cybersecurity","Green Energy","EdTech","Green Finance"],
+    topicsAz:["Kibertəhlükəsizlik","Yaşıl Enerji","Rəqəmsal Təhsil","Yaşıl Maliyyə"],
+    startups:["Bioplastik","Brain Battle","GreenGuest","Edu Sphera","Mindix","Digital School","WhatShop","TrendSizOl","Walceselery","Lesgo","Neptune X","TheGalacticSociety","PowerSun","EcoZib","AquaSave","VisionMission","LEGAL EASE","B2B ALPHA SYSTEM","X kid","Event Hub","Agrochar","Zermy","EcoRadSo"],
+    winners:[{place:1,name:"Bioplastik",founder:"Pünhan Camalov",prize:"3,000 AZN"},{place:2,name:"Green Guest",founder:"Şərif Şirəliyev",prize:"2,000 AZN"},{place:3,name:"Brain Battle",founder:"Həsən Bədəlli",prize:"1,000 AZN"}]
+  },
+  {
+    id:2, name:"RASSEP 2nd Wave Hackathon", nameAz:"RASSEP 2-ci dalğa hakaton",
+    venue:"Baku Engineering University", venueAz:"Bakı Mühəndislik Universiteti",
+    partner:"Yeni Fikir MMC", coordinator:"Nigar Abdullayeva",
+    date:"13-14.09.2025", category:"tech", region:"Baku",
+    desc:"2nd wave hackathon with 19 startups on cybersecurity, renewable energy, digital education, and sustainable investments.",
+    descAz:"Kibertəhlükəsizlik, yaşıl enerji, rəqəmsal təhsil mövzusunda 19 startapın formalaşması ilə 2-ci dalğa hakaton.",
+    budget:{amount:14350,currency:"AZN"},
+    stats:{applicants:83,selected:19,participants:19,winners:3},
+    topics:["Cybersecurity","Green Energy","EdTech","Sustainable Investment"],
+    topicsAz:["Kibertəhlükəsizlik","Yaşıl Enerji","Rəqəmsal Təhsil","Davamlı İnvestisiya"],
+    startups:["Poice","Biodiesel","MynEra","BridgeSpero","EnergyX","CoThink","HackTrain","Yaşılscan","NeuroPayX","PRSMYN","Eve","Study smart","AgriSat","Reforger","Envest","RQ Tech","VivaLina","nc4DMW","Greenight"],
+    winners:[{place:1,name:"nc4DMW",founder:"Yusif Yusif",prize:"3,000 AZN"},{place:2,name:"AgriSat",founder:"Ərtoğrul Qayıbov",prize:"2,000 AZN"},{place:3,name:"MynEra",founder:"Orxan Məmmədzadə",prize:"1,000 AZN"}]
+  },
+  {
+    id:3, name:"Construction Tech Hackathon", nameAz:"Construction Tech hakaton",
+    venue:"AZMIU", venueAz:"AZMİU",
+    partner:"AZMİU", coordinator:"Nigar Abdullayeva",
+    date:"13-14.05.2025", category:"construction", region:"Baku",
+    desc:"Architecture and construction focused hackathon with 19 startups.",
+    descAz:"Memarlıq və inşaat istiqamətində 19 startapın yaranması ilə baş tutan hakaton.",
+    budget:{amount:7260,currency:"AZN"},
+    stats:{applicants:30,selected:19,participants:19,winners:3},
+    topics:["Architecture","Construction","Smart Building"],
+    topicsAz:["Memarlıq","İnşaat","Ağıllı Bina"],
+    startups:["Flowcell","Safe Vision","SunTrack","FORTEXA BUILD","4+1","Supervenedi","Steel Nerves","CityLab","BuildSync","SmartFlow","SkyGuard","GreenTech","Recolith-Az","CycleMat","Sitescan Ai","SmartCon","TourMate","BuildMind","Xarı Bülbül"],
+    winners:[{place:1,name:"Flow Cell",founder:"Muradov Cavidan",prize:"2,000 AZN"},{place:2,name:"Steel Nerves",founder:"Salamova Aydan",prize:"1,500 AZN"},{place:3,name:"4+1",founder:"Məmmədov Həsənəli",prize:"1,000 AZN"}]
+  },
+  {
+    id:4, name:"UFAZ Innovators - AI/ML Hackathon", nameAz:"UFAZ Innovators - AI/ML hakaton",
+    venue:"UFAZ", venueAz:"UFAZ",
+    partner:"ADNSU - UFAZ", coordinator:"Nigar Abdullayeva",
+    date:"29-30.11.2025", category:"ai", region:"Baku",
+    desc:"AI and Machine Learning hackathon for ADNSU and UFAZ students with 22 startups.",
+    descAz:"ADNSU və UFAZ tələbələri üçün süni intellekt və maşın öyrənmə tətbiqləri mövzusunda hakaton.",
+    budget:{amount:11550,currency:"AZN"},
+    stats:{applicants:59,selected:22,participants:22,winners:3},
+    topics:["AI","Machine Learning","Deep Learning","NLP"],
+    topicsAz:["Süni İntellekt","Maşın Öyrənmə","Dərin Öyrənmə","NLP"],
+    startups:["EduMatch AI","Find My Desire","AEYE","StudUP","Nova Security AI","Ions","FlowSense","UniFlow","Nematic","Lendly","Shift AI","EduAppl AI","Smart Greed AI","SmartScreen","EcoRate","YerTap","FinMind","HystoryX","Trazel","VibeAthon","Receipt Wise","Mali AI"],
+    winners:[{place:1,name:"AI Strikers",founder:"İsmayılova Asiman",prize:"2,500 AZN"},{place:2,name:"NAVI",founder:"Musazadə Vüsal",prize:"1,500 AZN"},{place:3,name:"Smart Screen",founder:"Şıxəyeva Samayə",prize:"1,000 AZN"}]
+  },
+  {
+    id:5, name:"FIRE LAND - Innovate Future with AI", nameAz:"FIRE LAND - Süni intellektlə gələcəyə",
+    venue:"Odlar Yurdu University", venueAz:"Odlar Yurdu Universiteti",
+    partner:"Odlar Yurdu University", coordinator:"Nigar Abdullayeva",
+    date:"21-22.11.2025", category:"ai", region:"Baku",
+    desc:"AI, innovation, and digital technologies hackathon for all Azerbaijan university students.",
+    descAz:"Bütün Azərbaycan universitetlərinin tələbələri üçün süni intellekt, innovasiya və rəqəmsal texnologiyalar hakatonu.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:55,selected:20,participants:20,winners:4},
+    topics:["AI","Innovation","Digital Technologies"],
+    topicsAz:["Süni İntellekt","İnnovasiya","Rəqəmsal Texnologiyalar"],
+    startups:["EduAI","Justice AI","Medscan","Innogap","Yeddi AI","Eniax","Meridian","V","Devora","Core4","Engineers","Mynera","bit4che","Toordemy AI","Cryxen","Safeplace","Aviora","Agrosphere","Specialty","AutiSense"],
+    winners:[{place:1,name:"Eniax",founder:"Əhmədov İsa",prize:"1,000 AZN"},{place:2,name:"Meridian",founder:"Orucov Nurlan",prize:"800 AZN"},{place:3,name:"Yeddi AI",founder:"İbrahimli Fuad",prize:"500 AZN"}]
+  },
+  {
+    id:6, name:"Green Karabakh Hackathon", nameAz:"Yaşıl Qarabağ hakatonu",
+    venue:"UNEC", venueAz:"UNEC",
+    partner:"UNEC", coordinator:"Nigar Abdullayeva",
+    date:"25-26.12.2025", category:"green", region:"Baku",
+    desc:"Green technological solutions and innovation in Karabakh with 12 startups.",
+    descAz:"Qarabağda yaşıl texnoloji həllər və innovasiya mövzusunda 12 startap.",
+    budget:{amount:23000,currency:"AZN"},
+    stats:{applicants:30,selected:11,participants:12,winners:3},
+    topics:["GreenTech","Karabakh","Sustainability"],
+    topicsAz:["Yaşıl Texnologiya","Qarabağ","Davamlılıq"],
+    startups:["ExploGreen","SustainX","EcoWatch","Digital Ducks","404x","BioMatrix","EcoNexus","UNZF","Efulo","Frack","Green Path"],
+    winners:[{place:1,name:"ExploGreen",founder:"Həziyev Emin",prize:"4,000 AZN"},{place:2,name:"SustainX",founder:"Quliyeva Fidan",prize:"2,500 AZN"},{place:3,name:"EcoWatch",founder:"Həsənov Özcan",prize:"1,000 AZN"}]
+  },
+  {
+    id:7, name:"B2B Solutions Hackathon", nameAz:"B2B Həllər hakatonu",
+    venue:"UNEC", venueAz:"UNEC",
+    partner:"UNEC", coordinator:"Nigar Abdullayeva",
+    date:"23-24.12.2025", category:"b2b", region:"Baku",
+    desc:"B2B innovative solutions hackathon with 15 startups.",
+    descAz:"B2B innovativ həllər mövzusunda 15 startapın formalaşması ilə baş tutan hakaton.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:29,selected:15,participants:15,winners:3},
+    topics:["B2B","Enterprise Solutions","Innovation"],
+    topicsAz:["B2B","Korporativ Həllər","İnnovasiya"],
+    startups:["Agrisense","Indefector","PlanneX","MailGuard","CentraSec Al","UBEx","Beacon","Smarthire","Payonaz","Valora","Autopay","TopHub","Tedrisync","SlicesMetric","AgroTrust AZ"],
+    winners:[{place:1,name:"Enthuzone",founder:"Qafarov Kənan",prize:"4,000 AZN"},{place:2,name:"Savai",founder:"Mahmudov Raul",prize:"2,500 AZN"},{place:3,name:"ITeaguys",founder:"Həsənzadə Cavid",prize:"1,000 AZN"}]
+  },
+  {
+    id:8, name:"IGDA Hackathon (Baku)", nameAz:"IGDA hakaton (Bakı)",
+    venue:"Alas Academy", venueAz:"Alas Akademiyası",
+    partner:"IGDA", coordinator:"Nikita Yudin",
+    date:"25-27.04.2025", category:"gamedev", region:"Baku",
+    desc:"GameDev focused hackathon with 9 games created.",
+    descAz:"GameDev mövzusunda 9 komanda tərəfindən 9 oyunun formalaşması ilə baş tutan hakaton.",
+    budget:{amount:99600,currency:"AZN"},
+    stats:{applicants:9,selected:9,participants:9,winners:3},
+    topics:["Game Development","Unity","Unreal Engine"],
+    topicsAz:["Oyun İnkişafı","Unity","Unreal Engine"],
+    startups:["Doodie Moodie","Lucid Space","FableWalker","Aurora of Helious","Some Unity Bugs","Error 404: Still working","FeverWake","Ctrl Z","Restless Dreams"],
+    winners:[{place:1,name:"Voyagers",founder:"Mehmet Şahinci",prize:"Tech equipment"},{place:2,name:"PixelNodes",founder:"Vəliyev Riyad",prize:"Tech equipment"},{place:3,name:"Türka",founder:"Qafatov Mətin",prize:"Tech equipment"}]
+  },
+  {
+    id:9, name:"IGDA Hackathon (Ganja)", nameAz:"IGDA hakaton (Gəncə)",
+    venue:"Ganja Technical University", venueAz:"Gəncə Texniki Universiteti",
+    partner:"IGDA", coordinator:"Nikita Yudin",
+    date:"02-04.05.2025", category:"gamedev", region:"Ganja",
+    desc:"GameDev hackathon in Ganja with 7 games created.",
+    descAz:"Gəncədə GameDev mövzusunda 7 oyunun yaradılması ilə baş tutan hakaton.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:7,selected:7,participants:7,winners:1},
+    topics:["Game Development"],
+    topicsAz:["Oyun İnkişafı"],
+    startups:["Pixel Quest","FBA","Bunny Ups","FrogMania","Lord: The Rise of Darkness","Lava Escape","The Silent Basement"],
+    winners:[{place:1,name:"TrojanHorse Studio",founder:"Aşalarlı Elturan",prize:"Promo gifts"}]
+  },
+  {
+    id:10, name:"IGDA Hackathon (Nakhchivan)", nameAz:"IGDA hakaton (Naxçıvan)",
+    venue:"Nakhchivan State University", venueAz:"Naxçıvan Dövlət Universiteti",
+    partner:"IGDA", coordinator:"Nikita Yudin",
+    date:"23-25.05.2025", category:"gamedev", region:"Nakhchivan",
+    desc:"GameDev hackathon in Nakhchivan with 8 games created.",
+    descAz:"Naxçıvanda GameDev mövzusunda 8 oyunun yaradılması ilə baş tutan hakaton.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:8,selected:8,participants:8,winners:1},
+    topics:["Game Development"],
+    topicsAz:["Oyun İnkişafı"],
+    startups:["BOLTSTORM","DAVYS MAULER","İsmayılov","Ponsman","Wings of Hope","JUMPERGUN","Find the key","Lava Rising"],
+    winners:[{place:1,name:"FiPa",founder:"Ezgisu Atila",prize:"Promo gifts"}]
+  },
+  {
+    id:11, name:"Impulse4Women Hackathon", nameAz:"Impulse4Women hakatonu",
+    venue:"IDDA", venueAz:"İRİA",
+    partner:"Impulse4Women", coordinator:"Solmaz Əkbərova Vəliyeva",
+    date:"25.02.2025", category:"women", region:"Baku",
+    desc:"Exclusive hackathon for female university students to boost women's role in innovation.",
+    descAz:"Qadın sahibkarların innovasiya ekosistemindəki rolunu artırmaq məqsədilə keçirilən hakaton.",
+    budget:{amount:24880,currency:"EUR"},
+    stats:{applicants:120,selected:14,participants:14,winners:3},
+    topics:["Women in Tech","Sustainability","CleanTech"],
+    topicsAz:["Texnologiyada Qadınlar","Davamlılıq","Təmiz Texnologiya"],
+    startups:["Airvive","Emission Filter","BIN2WIN","2Green","ReSoil","Eco Thermix","CristalClean","3G Green Glam Girls","GreenX","Meta Yeast","Greenix","ECOGO!","Smart Bin","SHEnergy"],
+    winners:[{place:1,name:"2Green",founder:"—",prize:"3,000 EUR"},{place:2,name:"AirVive",founder:"—",prize:"2,000 EUR"},{place:3,name:"Cristal Clean",founder:"—",prize:"1,000 EUR"}]
+  },
+  {
+    id:12, name:"Micro SaaS Hackathon", nameAz:"Micro SaaS hakatonu",
+    venue:"IDDA", venueAz:"İRİA",
+    partner:"GDG", coordinator:"Vaqif Axundov",
+    date:"13-14.09.2025", category:"saas", region:"Baku",
+    desc:"Open data portal innovation hackathon with 19 SaaS startups.",
+    descAz:"Açıq məlumatlar portalının innovasiya layihələrində istifadəsi üzrə Micro SaaS hakaton.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:20,selected:19,participants:19,winners:4},
+    topics:["SaaS","Open Data","Micro Products"],
+    topicsAz:["SaaS","Açıq Məlumat","Mikro Məhsullar"],
+    startups:["Flowy","Azerproperty","Sublyst","Clippy","Alertify","Formulize","FarmAz","Temply","MedScan","BikeFlow","Repilay","FeedAI","QRizza","ScanMaster","StandLog","Rashot","Goalify","Sellora","TextHelper"],
+    winners:[{place:1,name:"Neovim",founder:"Hüseynov Vüsal",prize:"Subscriptions & gifts"},{place:2,name:"Hype",founder:"Qurbanlı Vüqar",prize:"Subscriptions & gifts"},{place:3,name:"Team Sassy",founder:"Azimova Fidan",prize:"Subscriptions & gifts"}]
+  },
+  {
+    id:13, name:"Tenity Hackathon 1", nameAz:"Tenity hakaton 1",
+    venue:"IDDA", venueAz:"İRİA",
+    partner:"Tenity", coordinator:"Elxan Şükürov",
+    date:"14-16.11.2025", category:"fintech", region:"Baku",
+    desc:"First IDDA x Tenity hackathon — 155 applicants, 43 startups, FinTech focus.",
+    descAz:"İlk IDDA x Tenity hakatonu — 155 müraciətçi, 43 startap, FinTech fokus.",
+    budget:{amount:40000,currency:"USD"},
+    stats:{applicants:155,selected:43,participants:43,winners:3},
+    topics:["FinTech","Banking","Insurance","Payments"],
+    topicsAz:["FinTex","Bankçılıq","Sığorta","Ödənişlər"],
+    startups:["Optisend","Labrix","Tripster","Finova","Alphadroid","BubbleID","BofiAI","CreditFlow","CarVia","PropToken","Ubique Pay","EasyFin","FinStart","EcoEarn","FastFi","FinLink Pro","NeuroTrust","Food2","GooseTech","Zephyr","Bscore","Imba6","Innovatrix","FINTRACK AI","LockFi","Money Buddy AI","MICROJOB","NeoBankers","NeuroPayX","FLYY","FinOS","EduWallet","MALIMAX","SME Agent","RiskCalibra","SafeSense","VerbAI","The Financier","Invest Wolf","TrustScore","EcoTrack","GreenBiz"],
+    winners:[{place:1,name:"Nexora",founder:"İsmayılova Asiman",prize:"2,000 USD"},{place:2,name:"Labrix",founder:"Əliyev Tuncay",prize:"1,500 USD"},{place:3,name:"GoAzerbaijan",founder:"Əhmədli Xəyal",prize:"1,000 USD"}]
+  },
+  {
+    id:14, name:"Tenity Hackathon 2", nameAz:"Tenity hakaton 2",
+    venue:"IDDA", venueAz:"İRİA",
+    partner:"Tenity", coordinator:"Elxan Şükürov",
+    date:"19-21.12.2025", category:"fintech", region:"Baku",
+    desc:"Second IDDA x Tenity hackathon — 114 applicants, 35 startups.",
+    descAz:"İkinci IDDA x Tenity hakatonu — 114 müraciətçi, 35 startap.",
+    budget:{amount:40000,currency:"USD"},
+    stats:{applicants:114,selected:35,participants:35,winners:3},
+    topics:["FinTech","InsurTech","Payments","AI Finance"],
+    topicsAz:["FinTex","SığortaTex","Ödənişlər","AI Maliyyə"],
+    startups:["Arkana Middleware","PaySphere","DorY AI","MeBudget","AxiomGuard","BridgeUnion","CapX","Cerberus","FINOVA","MyBiz","EmoteCore","CrediVerse","Maden","DeepSense","LifePath AI","FamPay","PayPilot","REMITY","KLASTER","FinBrain","BudgetBuff","Track-Tor","Digital investment accelerator","Insurance AI","Neural Paradox","EXPENZA","FINGUARD","PRICEPILOT","KeySense","InsurTechAI","Nvoice","Loanify","Lendly","FINFLOW","Zaman"],
+    winners:[{place:1,name:"Starlabs",founder:"Həsənov Eldar",prize:"2,000 USD"},{place:2,name:"InsurTech",founder:"Abdullayev Ramazan",prize:"1,500 USD"},{place:3,name:"DeepSense",founder:"Sadigli Rəsul",prize:"1,000 USD"}]
+  },
+  {
+    id:15, name:"Innostart Hackathon (Ganja 1)", nameAz:"Innostart hakaton (Gəncə 1)",
+    venue:"Ganja", venueAz:"Gəncə",
+    partner:"SUP.VC", coordinator:"Elxan Şükürov",
+    date:"12-13.10.2025", category:"regional", region:"Ganja",
+    desc:"General purpose regional hackathon in Ganja with 16 startups.",
+    descAz:"Gəncə regionunda ümumi təyinatlı hakaton — 16 startap.",
+    budget:{amount:120080,currency:"AZN"},
+    stats:{applicants:163,selected:16,participants:16,winners:3},
+    topics:["General","Regional Innovation"],
+    topicsAz:["Ümumi","Regional İnnovasiya"],
+    startups:["Thinkers","Ecoreviw","Nature guardians","Smartcargo","Linnova","Qapida","Wish","DigitalTeach","Eco Engineers","Flash Mentor","Printly","Safbazaar","Eco Grow","WedDiv","Medimorp","Aigro"],
+    winners:[{place:1,name:"Linnova",founder:"Vəliyev Hüseyn",prize:"3,000 AZN"},{place:2,name:"Pracfix",founder:"Muradov Camil",prize:"1,500 AZN"},{place:3,name:"Qapida",founder:"Razazadə İbrahim",prize:"500 AZN"}]
+  },
+  {
+    id:16, name:"Innostart Hackathon (Ganja 2)", nameAz:"Innostart hakaton (Gəncə 2)",
+    venue:"Ganja", venueAz:"Gəncə",
+    partner:"SUP.VC", coordinator:"Elxan Şükürov",
+    date:"15-16.03.2025", category:"regional", region:"Ganja",
+    desc:"Second general purpose hackathon in Ganja with 12 startups.",
+    descAz:"Gəncədə 2-ci ümumi hakaton — 12 startap.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:139,selected:12,participants:12,winners:3},
+    topics:["General","Regional Innovation"],
+    topicsAz:["Ümumi","Regional İnnovasiya"],
+    startups:["FlexRide","Dermoza","Ateshlab","DigitalTeach","InHome","Karavogue","AgroSphere","EcoTech Titans","Freelaner","Glamo","ZonMend","BioTech"],
+    winners:[{place:1,name:"Glamo",founder:"Qurbanov Vurğun",prize:"5,000 AZN"},{place:2,name:"AgroSphere",founder:"Süleymanov Bayram",prize:"3,000 AZN"},{place:3,name:"BioTech",founder:"Qurbanov Orxan",prize:"2,000 AZN"}]
+  },
+  {
+    id:17, name:"Innostart Hackathon (Lankaran 1)", nameAz:"Innostart hakaton (Lənkəran 1)",
+    venue:"Lankaran", venueAz:"Lənkəran",
+    partner:"SUP.VC", coordinator:"Elxan Şükürov",
+    date:"19-20.10.2025", category:"regional", region:"Lankaran",
+    desc:"Regional hackathon in Lankaran with 12 startups.",
+    descAz:"Lənkəran regionunda hakaton — 12 startap.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:118,selected:12,participants:12,winners:3},
+    topics:["General","Regional Innovation"],
+    topicsAz:["Ümumi","Regional İnnovasiya"],
+    startups:["Speranza","Green Path","Nova","Future","Evrika","InnoMedia","Kend Sefrist","PrimeLife","BalBee","Ziyale 1","Ziyale 2","R Carrier"],
+    winners:[{place:1,name:"BalBee",founder:"Yaqubov Sayavuş",prize:"3,000 AZN"},{place:2,name:"GreenPath",founder:"Əlizadə Suzanna",prize:"1,500 AZN"},{place:3,name:"Evrika",founder:"Məmmədli",prize:"500 AZN"}]
+  },
+  {
+    id:18, name:"Innostart Hackathon (Lankaran 2)", nameAz:"Innostart hakaton (Lənkəran 2)",
+    venue:"Lankaran", venueAz:"Lənkəran",
+    partner:"SUP.VC", coordinator:"Elxan Şükürov",
+    date:"01-02.03.2025", category:"regional", region:"Lankaran",
+    desc:"Second regional hackathon in Lankaran with 13 startups.",
+    descAz:"Lənkəranda 2-ci hakaton — 13 startap.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:125,selected:13,participants:13,winners:3},
+    topics:["General","Tourism","AgriTech"],
+    topicsAz:["Ümumi","Turizm","AqroTex"],
+    startups:["Turaget.com","ARTOVIEA","Guvenli destek","PawPal","Maximum","OSA","Farmex","TourWise","ProLan","Temizleyici","Vendify","Turizy","Smart group"],
+    winners:[{place:1,name:"PawPal",founder:"Əlizadə Rəşid",prize:"5,000 AZN"},{place:2,name:"Turizy",founder:"Şükürov Rəsul",prize:"3,000 AZN"},{place:3,name:"OSA",founder:"Mirzəyev Elməddin",prize:"2,000 AZN"}]
+  },
+  {
+    id:19, name:"Innostart Hackathon (Sumgait 1)", nameAz:"Innostart hakaton (Sumqayıt 1)",
+    venue:"Sumgait", venueAz:"Sumqayıt",
+    partner:"SUP.VC", coordinator:"Elxan Şükürov",
+    date:"25-26.01.2025", category:"regional", region:"Sumgait",
+    desc:"Regional hackathon in Sumgait with 15 startups.",
+    descAz:"Sumqayıt regionunda hakaton — 15 startap.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:207,selected:15,participants:15,winners:3},
+    topics:["General","Regional Innovation"],
+    topicsAz:["Ümumi","Regional İnnovasiya"],
+    startups:["IdeaLab","Fighting","Waterworn","Mearth","Ismayilli Brain","BottleArc","StarApp","Avto Club","BLACK INSTRUMENT","Gomeet","BacarIQ","SARA","animals","EcoWatch360","Ozpay"],
+    winners:[{place:1,name:"OzPay",founder:"Babayev Arif",prize:"3,000 AZN"},{place:2,name:"StartAPP",founder:"Sixiyev Yusif",prize:"1,500 AZN"},{place:3,name:"IdeaLab",founder:"Hüseynov Ayxan",prize:"500 AZN"}]
+  },
+  {
+    id:20, name:"Innostart Hackathon (Sumgait 2)", nameAz:"Innostart hakaton (Sumqayıt 2)",
+    venue:"Sumgait", venueAz:"Sumqayıt",
+    partner:"SUP.VC", coordinator:"Elxan Şükürov",
+    date:"05-06.04.2025", category:"regional", region:"Sumgait",
+    desc:"Second Sumgait hackathon with 11 startups.",
+    descAz:"Sumqayıtda 2-ci hakaton — 11 startap.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:186,selected:11,participants:11,winners:3},
+    topics:["General","Regional Innovation"],
+    topicsAz:["Ümumi","Regional İnnovasiya"],
+    startups:["FootForce","Melora","Paylash","Teb.az","Peersonal","JobfindX","Star.az","CodePays","Biolonic","Uzaq amma yaxin","StudentAll"],
+    winners:[{place:1,name:"Codepays",founder:"Şahaleyeva Aydan",prize:"5,000 AZN"},{place:2,name:"Biolonic",founder:"Ayralov Məhəmmədəli",prize:"3,000 AZN"},{place:3,name:"Student All",founder:"Razayev Ayxan",prize:"2,000 AZN"}]
+  },
+  {
+    id:21, name:"Innostart Hackathon (Nakhchivan 1)", nameAz:"Innostart hakaton (Naxçıvan 1)",
+    venue:"Nakhchivan", venueAz:"Naxçıvan",
+    partner:"SUP.VC", coordinator:"Elxan Şükürov",
+    date:"25-26.01.2025", category:"regional", region:"Nakhchivan",
+    desc:"Regional hackathon in Nakhchivan with 12 startups.",
+    descAz:"Naxçıvanda hakaton — 12 startap.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:97,selected:12,participants:12,winners:3},
+    topics:["General","Regional Innovation"],
+    topicsAz:["Ümumi","Regional İnnovasiya"],
+    startups:["Scapp","Talentena","SpecDeaf","SafeOrbit","ElmSphere","TENA CyberGuard","BioScript","Uwater","FondWay","OnePharm","Baclx","BioScript"],
+    winners:[{place:1,name:"SpecDeaf",founder:"Məmmədzadə Ağabəy",prize:"3,000 AZN"},{place:2,name:"OnePharm",founder:"Məmmədov Oğuz",prize:"1,500 AZN"},{place:3,name:"BioScript",founder:"Hüseyn Tahirov",prize:"500 AZN"}]
+  },
+  {
+    id:22, name:"Innostart Hackathon (Nakhchivan 2)", nameAz:"Innostart hakaton (Naxçıvan 2)",
+    venue:"Nakhchivan", venueAz:"Naxçıvan",
+    partner:"SUP.VC", coordinator:"Elxan Şükürov",
+    date:"22-23.02.2025", category:"regional", region:"Nakhchivan",
+    desc:"Second Nakhchivan hackathon with 23 startups.",
+    descAz:"Naxçıvanda 2-ci hakaton — 23 startap.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:132,selected:23,participants:23,winners:3},
+    topics:["General","Regional Innovation","AI","Tourism"],
+    topicsAz:["Ümumi","Regional İnnovasiya","Süni İntellekt","Turizm"],
+    startups:["MindCare","Cafe Plus","Find&Call","KvantSafe","AI Doctor","Nakh Tourism Tech","VisiWear","Booknest","Terai Chat","Gozy","NaviBus","PriX","FEED","Rent share","AdMatic","Salitte","ImYEN","MindConnect","TENA GUARDER","Kimi.az","LEXA","AutoX","HBelectronics DataHunter"],
+    winners:[{place:1,name:"ImYEN",founder:"Eren Alkan",prize:"5,000 AZN"},{place:2,name:"KIMI",founder:"Cafer Hüseynov",prize:"3,000 AZN"},{place:3,name:"PriX",founder:"Novruzova Jalə",prize:"2,000 AZN"}]
+  },
+  {
+    id:23, name:"Azercosmos Space Hackathon", nameAz:"Azercosmos Kosmik hakatonu",
+    venue:"Baku", venueAz:"Bakı",
+    partner:"Azercosmos", coordinator:"Elxan Şükürov",
+    date:"06-07.12.2025", category:"space", region:"Baku",
+    desc:"National Space Hackathon for youth aged 18-35, space economy and satellite innovation.",
+    descAz:"18-35 yaş gənclər üçün Milli Kosmik Hakaton — kosmik iqtisadiyyat və peyk innovasiyası.",
+    budget:{amount:0,currency:"AZN"},
+    stats:{applicants:150,selected:15,participants:15,winners:3},
+    topics:["Space Tech","Satellite","Remote Sensing","AgriTech"],
+    topicsAz:["Kosmik Texnologiya","Peyk","Uzaqdan Zondlama","AqroTex"],
+    startups:["GeoMerge","AgriMonitor","FUSIONMAP","Millenium","Intelligent Marine Habitat","FireBug","Methane Guard","Agrocoda","AgrowEasy","ZINova","Wave","AgriSight Cloud-Free","Ekinchi.ai","SPARKS.lab","Technova"],
+    winners:[{place:1,name:"Millenium",founder:"Rail Nuriyev",prize:"3,000 AZN"},{place:2,name:"SITE",founder:"Toğrul Gülüzadə",prize:"2,000 AZN"},{place:3,name:"Astryx",founder:"Cavid Məmmədov",prize:"1,500 AZN"}]
+  }
+];
+
+const categories = [
+  {key:"all",label:"All",labelAz:"Hamısı",color:"#7c3aed"},
+  {key:"tech",label:"Tech",labelAz:"Texnologiya",color:"#3b82f6"},
+  {key:"ai",label:"AI/ML",labelAz:"Süni İntellekt",color:"#8b5cf6"},
+  {key:"fintech",label:"FinTech",labelAz:"FinTex",color:"#10b981"},
+  {key:"gamedev",label:"GameDev",labelAz:"Oyun İnkişafı",color:"#f59e0b"},
+  {key:"green",label:"Green Tech",labelAz:"Yaşıl Tex",color:"#22c55e"},
+  {key:"construction",label:"Construction",labelAz:"İnşaat",color:"#ef4444"},
+  {key:"b2b",label:"B2B",labelAz:"B2B",color:"#06b6d4"},
+  {key:"women",label:"Women",labelAz:"Qadınlar",color:"#ec4899"},
+  {key:"saas",label:"SaaS",labelAz:"SaaS",color:"#6366f1"},
+  {key:"space",label:"Space",labelAz:"Kosmik",color:"#1e3a5f"},
+  {key:"regional",label:"Regional",labelAz:"Regional",color:"#f97316"},
+];
+
+const regions = ["All","Baku","Ganja","Lankaran","Sumgait","Nakhchivan"];
+
+// ===== COMPONENTS =====
+
+function LangToggle({lang, setLang}) {
+  return (
+    <div style={{display:'flex',gap:4,background:'rgba(255,255,255,0.15)',borderRadius:20,padding:3}}>
+      {['AZ','EN'].map(l => (
+        <button key={l} onClick={()=>setLang(l.toLowerCase())}
+          style={{padding:'6px 16px',borderRadius:18,border:'none',cursor:'pointer',fontSize:13,fontWeight:600,
+            background: lang===l.toLowerCase() ? '#fff' : 'transparent',
+            color: lang===l.toLowerCase() ? 'var(--purple-700)' : 'rgba(255,255,255,0.8)',
+            transition:'all .2s'}}>
+          {l}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function StatCard({value,label,icon,delay=0}) {
+  const [show,setShow] = useState(false);
+  useEffect(()=>{const t=setTimeout(()=>setShow(true),delay);return()=>clearTimeout(t)},[delay]);
+  return (
+    <div style={{background:'#fff',borderRadius:16,padding:'28px 24px',textAlign:'center',
+      boxShadow:'0 1px 3px rgba(0,0,0,0.08)',border:'1px solid var(--gray-100)',
+      transform:show?'translateY(0)':'translateY(20px)',opacity:show?1:0,transition:'all .5s ease'}}>
+      <div style={{fontSize:36,marginBottom:8}}>{icon}</div>
+      <div style={{fontSize:42,fontWeight:800,fontFamily:'Space Grotesk',
+        background:'linear-gradient(135deg,var(--purple-600),var(--purple-400))',
+        WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>{value}</div>
+      <div style={{fontSize:14,color:'var(--gray-500)',marginTop:6,fontWeight:500}}>{label}</div>
+    </div>
+  );
+}
+
+function CategoryPill({cat, active, onClick, lang}) {
+  const isActive = active;
+  return (
+    <button onClick={onClick} style={{
+      padding:'8px 18px',borderRadius:24,border: isActive ? 'none' : '1px solid var(--gray-200)',
+      cursor:'pointer',fontSize:13,fontWeight:600,whiteSpace:'nowrap',
+      background: isActive ? cat.color : '#fff',
+      color: isActive ? '#fff' : 'var(--gray-600)',
+      transition:'all .2s',boxShadow: isActive ? `0 4px 12px ${cat.color}40` : 'none',
+    }}>
+      {lang==='az'? cat.labelAz : cat.label}
+    </button>
+  );
+}
+
+function MedalIcon({place}) {
+  const colors = {1:'#FFD700',2:'#C0C0C0',3:'#CD7F32'};
+  return (
+    <div style={{width:32,height:32,borderRadius:'50%',background:colors[place]||'#999',
+      display:'flex',alignItems:'center',justifyContent:'center',
+      fontSize:14,fontWeight:800,color:'#fff',boxShadow:`0 2px 8px ${colors[place]}60`,flexShrink:0}}>
+      {place}
+    </div>
+  );
+}
+
+function HackathonCard({h, lang, onClick}) {
+  const catObj = categories.find(c=>c.key===h.category) || categories[0];
+  const [hovered,setHovered] = useState(false);
+  return (
+    <div onClick={onClick} onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}
+      className="animate-fade-in"
+      style={{background:'#fff',borderRadius:20,overflow:'hidden',cursor:'pointer',
+        border:'1px solid var(--gray-100)',
+        boxShadow: hovered ? '0 20px 40px rgba(124,58,237,0.12)' : '0 1px 3px rgba(0,0,0,0.06)',
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        transition:'all .3s ease'}}>
+      <div style={{height:6,background:`linear-gradient(90deg, ${catObj.color}, ${catObj.color}88)`}}/>
+      <div style={{padding:'24px 24px 20px'}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:12,marginBottom:12}}>
+          <div>
+            <span style={{display:'inline-block',padding:'4px 12px',borderRadius:20,fontSize:11,fontWeight:700,
+              background:`${catObj.color}15`,color:catObj.color,marginBottom:8,letterSpacing:'0.5px',textTransform:'uppercase'}}>
+              {lang==='az'? catObj.labelAz : catObj.label}
+            </span>
+            <h3 style={{fontSize:18,fontWeight:700,color:'var(--gray-800)',lineHeight:1.3}}>
+              {lang==='az' ? h.nameAz : h.name}
+            </h3>
+          </div>
+        </div>
+        <p style={{fontSize:13,color:'var(--gray-500)',lineHeight:1.5,marginBottom:16,
+          display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>
+          {lang==='az' ? h.descAz : h.desc}
+        </p>
+        <div style={{display:'flex',gap:16,flexWrap:'wrap',marginBottom:16}}>
+          <div style={{display:'flex',alignItems:'center',gap:6}}>
+            <span style={{fontSize:16}}>📍</span>
+            <span style={{fontSize:12,color:'var(--gray-500)'}}>{lang==='az'?h.venueAz:h.venue}</span>
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:6}}>
+            <span style={{fontSize:16}}>📅</span>
+            <span style={{fontSize:12,color:'var(--gray-500)'}}>{h.date}</span>
+          </div>
+          {h.budget.amount > 0 && <div style={{display:'flex',alignItems:'center',gap:6}}>
+            <span style={{fontSize:16}}>💰</span>
+            <span style={{fontSize:12,color:'var(--gray-500)',fontWeight:600}}>
+              {h.budget.amount.toLocaleString()} {h.budget.currency}
+            </span>
+          </div>}
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,padding:'12px 0',
+          borderTop:'1px solid var(--gray-100)'}}>
+          <div style={{textAlign:'center'}}>
+            <div style={{fontSize:22,fontWeight:800,color:'var(--purple-600)',fontFamily:'Space Grotesk'}}>{h.stats.applicants}</div>
+            <div style={{fontSize:11,color:'var(--gray-400)',fontWeight:500}}>{lang==='az'?'Müraciət':'Applicants'}</div>
+          </div>
+          <div style={{textAlign:'center'}}>
+            <div style={{fontSize:22,fontWeight:800,color:catObj.color,fontFamily:'Space Grotesk'}}>{h.stats.participants}</div>
+            <div style={{fontSize:11,color:'var(--gray-400)',fontWeight:500}}>{lang==='az'?'İştirakçı':'Teams'}</div>
+          </div>
+          <div style={{textAlign:'center'}}>
+            <div style={{fontSize:22,fontWeight:800,color:'var(--gold)',fontFamily:'Space Grotesk'}}>{h.stats.winners}</div>
+            <div style={{fontSize:11,color:'var(--gray-400)',fontWeight:500}}>{lang==='az'?'Qalib':'Winners'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DetailModal({h, lang, onClose}) {
+  const catObj = categories.find(c=>c.key===h.category) || categories[0];
+  useEffect(()=>{document.body.style.overflow='hidden';return()=>{document.body.style.overflow='auto'}},[]);
+  return (
+    <div onClick={onClose} style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.6)',backdropFilter:'blur(8px)',
+      zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:'#fff',borderRadius:24,maxWidth:800,width:'100%',
+        maxHeight:'90vh',overflow:'auto',position:'relative'}} className="animate-fade-in">
+        <div style={{background:`linear-gradient(135deg, ${catObj.color}, ${catObj.color}cc)`,padding:'32px 32px 24px',color:'#fff'}}>
+          <button onClick={onClose} style={{position:'absolute',top:16,right:16,background:'rgba(255,255,255,0.2)',
+            border:'none',borderRadius:'50%',width:36,height:36,cursor:'pointer',fontSize:18,color:'#fff',
+            display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+          <span style={{display:'inline-block',padding:'4px 12px',borderRadius:20,fontSize:11,fontWeight:700,
+            background:'rgba(255,255,255,0.2)',marginBottom:12,letterSpacing:'0.5px',textTransform:'uppercase'}}>
+            {lang==='az'? catObj.labelAz : catObj.label}
+          </span>
+          <h2 style={{fontSize:28,fontWeight:800,marginBottom:8,fontFamily:'Space Grotesk'}}>
+            {lang==='az' ? h.nameAz : h.name}
+          </h2>
+          <p style={{fontSize:15,opacity:0.9,lineHeight:1.5}}>{lang==='az' ? h.descAz : h.desc}</p>
+        </div>
+        <div style={{padding:32}}>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(120px,1fr))',gap:16,marginBottom:32}}>
+            {[
+              {v:h.stats.applicants,l:lang==='az'?'Müraciətçi':'Applicants',ic:'👥'},
+              {v:h.stats.selected,l:lang==='az'?'Seçilən':'Selected',ic:'✅'},
+              {v:h.stats.participants,l:lang==='az'?'İştirakçı':'Participants',ic:'🚀'},
+              {v:h.stats.winners,l:lang==='az'?'Qalib':'Winners',ic:'🏆'},
+            ].map((s,i)=>(
+              <div key={i} style={{textAlign:'center',padding:16,background:'var(--gray-50)',borderRadius:12}}>
+                <div style={{fontSize:24,marginBottom:4}}>{s.ic}</div>
+                <div style={{fontSize:28,fontWeight:800,color:catObj.color,fontFamily:'Space Grotesk'}}>{s.v}</div>
+                <div style={{fontSize:12,color:'var(--gray-500)'}}>{s.l}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:28}}>
+            <div style={{padding:16,background:'var(--purple-50)',borderRadius:12}}>
+              <div style={{fontSize:12,color:'var(--purple-400)',fontWeight:600,marginBottom:4,textTransform:'uppercase'}}>
+                {lang==='az'?'Tərəfdaş':'Partner'}
+              </div>
+              <div style={{fontSize:15,fontWeight:600,color:'var(--gray-800)'}}>{h.partner}</div>
+            </div>
+            <div style={{padding:16,background:'var(--purple-50)',borderRadius:12}}>
+              <div style={{fontSize:12,color:'var(--purple-400)',fontWeight:600,marginBottom:4,textTransform:'uppercase'}}>
+                {lang==='az'?'Koordinator':'Coordinator'}
+              </div>
+              <div style={{fontSize:15,fontWeight:600,color:'var(--gray-800)'}}>{h.coordinator}</div>
+            </div>
+            <div style={{padding:16,background:'var(--purple-50)',borderRadius:12}}>
+              <div style={{fontSize:12,color:'var(--purple-400)',fontWeight:600,marginBottom:4,textTransform:'uppercase'}}>
+                {lang==='az'?'Tarix & Məkan':'Date & Venue'}
+              </div>
+              <div style={{fontSize:15,fontWeight:600,color:'var(--gray-800)'}}>{h.date} — {lang==='az'?h.venueAz:h.venue}</div>
+            </div>
+            <div style={{padding:16,background:'var(--purple-50)',borderRadius:12}}>
+              <div style={{fontSize:12,color:'var(--purple-400)',fontWeight:600,marginBottom:4,textTransform:'uppercase'}}>
+                {lang==='az'?'Büdcə':'Budget'}
+              </div>
+              <div style={{fontSize:15,fontWeight:600,color:'var(--gray-800)'}}>
+                {h.budget.amount > 0 ? `${h.budget.amount.toLocaleString()} ${h.budget.currency}` : (lang==='az'?'Xarici maliyyə':'External funding')}
+              </div>
+            </div>
+          </div>
+
+          <div style={{marginBottom:28}}>
+            <h3 style={{fontSize:18,fontWeight:700,marginBottom:12,fontFamily:'Space Grotesk',color:'var(--gray-800)'}}>
+              {lang==='az'?'Mövzular':'Topics'}</h3>
+            <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+              {(lang==='az'?h.topicsAz:h.topics).map((t,i)=>(
+                <span key={i} style={{padding:'6px 14px',borderRadius:20,fontSize:12,fontWeight:600,
+                  background:`${catObj.color}10`,color:catObj.color,border:`1px solid ${catObj.color}20`}}>{t}</span>
+              ))}
+            </div>
+          </div>
+
+          <div style={{marginBottom:28}}>
+            <h3 style={{fontSize:18,fontWeight:700,marginBottom:16,fontFamily:'Space Grotesk',color:'var(--gray-800)'}}>
+              🏆 {lang==='az'?'Qaliblər':'Winners'}</h3>
+            <div style={{display:'flex',flexDirection:'column',gap:12}}>
+              {h.winners.map((w,i)=>(
+                <div key={i} style={{display:'flex',alignItems:'center',gap:16,padding:'14px 18px',
+                  background: i===0 ? 'linear-gradient(135deg,#FFF9E6,#FFF3CC)' : i===1 ? 'linear-gradient(135deg,#F8F8F8,#F0F0F0)' : 'linear-gradient(135deg,#FFF5EE,#FFEEDD)',
+                  borderRadius:14,border: i===0 ? '1px solid #FFD70040' : i===1 ? '1px solid #C0C0C040' : '1px solid #CD7F3240'}}>
+                  <MedalIcon place={w.place}/>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:16,fontWeight:700,color:'var(--gray-800)'}}>{w.name}</div>
+                    <div style={{fontSize:13,color:'var(--gray-500)'}}>{w.founder}</div>
+                  </div>
+                  <div style={{fontSize:14,fontWeight:700,color:catObj.color,whiteSpace:'nowrap'}}>{w.prize}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 style={{fontSize:18,fontWeight:700,marginBottom:12,fontFamily:'Space Grotesk',color:'var(--gray-800)'}}>
+              {lang==='az'? `Bütün Startaplar (${h.startups.length})` : `All Startups (${h.startups.length})`}</h3>
+            <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+              {h.startups.map((s,i)=>{
+                const isWinner = h.winners.some(w=>w.name.toLowerCase()===s.toLowerCase());
+                return (
+                  <span key={i} style={{padding:'5px 12px',borderRadius:8,fontSize:12,fontWeight:isWinner?700:500,
+                    background: isWinner ? `${catObj.color}15` : 'var(--gray-50)',
+                    color: isWinner ? catObj.color : 'var(--gray-600)',
+                    border: isWinner ? `1px solid ${catObj.color}30` : '1px solid var(--gray-100)'}}>
+                    {isWinner && '⭐ '}{s}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [lang, setLang] = useState('en');
+  const [search, setSearch] = useState('');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [activeRegion, setActiveRegion] = useState('All');
+  const [selectedHackathon, setSelectedHackathon] = useState(null);
+  const [view, setView] = useState('grid');
+
+  const filtered = useMemo(()=>{
+    return hackathons.filter(h=>{
+      const matchCat = activeCategory==='all' || h.category===activeCategory;
+      const matchRegion = activeRegion==='All' || h.region===activeRegion;
+      const q = search.toLowerCase();
+      const matchSearch = !q || h.name.toLowerCase().includes(q) || h.nameAz.toLowerCase().includes(q) ||
+        h.partner.toLowerCase().includes(q) || h.startups.some(s=>s.toLowerCase().includes(q)) ||
+        h.winners.some(w=>w.name.toLowerCase().includes(q));
+      return matchCat && matchRegion && matchSearch;
+    });
+  },[activeCategory,activeRegion,search]);
+
+  const totalStats = useMemo(()=>{
+    const totalStartups = hackathons.reduce((a,h)=>a+h.startups.length,0);
+    const totalApplicants = hackathons.reduce((a,h)=>a+h.stats.applicants,0);
+    const totalWinners = hackathons.reduce((a,h)=>a+h.stats.winners,0);
+    return {totalStartups, totalApplicants, totalWinners};
+  },[]);
+
+  const t = (az,en) => lang==='az' ? az : en;
+
+  return (
+    <div style={{minHeight:'100vh'}}>
+      {/* Header */}
+      <header style={{background:'linear-gradient(135deg, #1a0a3e 0%, #3f1f8e 50%, #5a2dbe 100%)',
+        position:'relative',overflow:'hidden'}}>
+        <div style={{position:'absolute',top:-100,right:-100,width:400,height:400,borderRadius:'50%',
+          background:'radial-gradient(circle, rgba(167,139,250,0.3), transparent 70%)'}}/>
+        <div style={{position:'absolute',bottom:-50,left:'30%',width:300,height:300,borderRadius:'50%',
+          background:'radial-gradient(circle, rgba(167,139,250,0.15), transparent 70%)'}}/>
+        <div style={{maxWidth:1280,margin:'0 auto',padding:'40px 32px 48px',position:'relative',zIndex:1}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:40}}>
+            <div style={{display:'flex',alignItems:'center',gap:16}}>
+              <div style={{width:48,height:48,borderRadius:12,background:'rgba(255,255,255,0.1)',
+                display:'flex',alignItems:'center',justifyContent:'center',
+                border:'1px solid rgba(255,255,255,0.15)'}}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{color:'#fff',fontSize:18,fontWeight:700,fontFamily:'Space Grotesk',letterSpacing:1}}>
+                  İRİA / IDDA
+                </div>
+                <div style={{color:'rgba(255,255,255,0.6)',fontSize:12}}>
+                  Innovation and Digital Development Agency
+                </div>
+              </div>
+            </div>
+            <LangToggle lang={lang} setLang={setLang}/>
+          </div>
+          <h1 style={{color:'#fff',fontSize:'clamp(28px,5vw,48px)',fontWeight:900,lineHeight:1.15,marginBottom:12,
+            fontFamily:'Space Grotesk'}}>
+            {t('Startap Ekosisteminə Dəstək','Startup Ecosystem Support')}<br/>
+            <span style={{background:'linear-gradient(135deg,#a78bfa,#e9d5ff)',WebkitBackgroundClip:'text',
+              WebkitTextFillColor:'transparent'}}>
+              {t('Hakatonlar Kataloqu 2025','Hackathon Catalog 2025')}
+            </span>
+          </h1>
+          <p style={{color:'rgba(255,255,255,0.7)',fontSize:16,maxWidth:650,lineHeight:1.6}}>
+            {t('2022-2026 Sosial İqtisadi Strategiya — Abşeron Vadisi çərçivəsində 300 yeni startapın inkişafına dəstək.',
+               '2022-2026 Socio-Economic Strategy — Absheron Valley framework supporting 300+ new startups.')}
+          </p>
+        </div>
+      </header>
+
+      {/* Stats Bar */}
+      <div style={{maxWidth:1280,margin:'-24px auto 0',padding:'0 32px',position:'relative',zIndex:2}}>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:16}}>
+          <StatCard value={hackathons.length.toString()} label={t('Hakaton','Hackathons')} icon="🎯" delay={100}/>
+          <StatCard value={totalStats.totalStartups.toLocaleString()} label={t('Startap','Startups Created')} icon="🚀" delay={200}/>
+          <StatCard value={totalStats.totalApplicants.toLocaleString()} label={t('Müraciətçi','Applicants')} icon="👥" delay={300}/>
+          <StatCard value="5" label={t('Region','Regions')} icon="🗺️" delay={400}/>
+          <StatCard value={totalStats.totalWinners.toString()} label={t('Qalib','Winners')} icon="🏆" delay={500}/>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div style={{maxWidth:1280,margin:'0 auto',padding:'40px 32px 0'}}>
+        {/* Search */}
+        <div style={{position:'relative',marginBottom:24}}>
+          <div style={{position:'absolute',left:16,top:'50%',transform:'translateY(-50%)',fontSize:20,color:'var(--gray-400)'}}>🔍</div>
+          <input type="text" value={search} onChange={e=>setSearch(e.target.value)}
+            placeholder={t('Hakaton, startap və ya tərəfdaş axtar...','Search hackathons, startups, or partners...')}
+            style={{width:'100%',padding:'14px 20px 14px 48px',borderRadius:16,border:'2px solid var(--gray-200)',
+              fontSize:15,outline:'none',background:'#fff',transition:'all .2s',fontFamily:'Inter'}}
+            onFocus={e=>e.target.style.borderColor='var(--purple-400)'}
+            onBlur={e=>e.target.style.borderColor='var(--gray-200)'}/>
+        </div>
+
+        {/* Category filters */}
+        <div style={{display:'flex',gap:8,overflowX:'auto',paddingBottom:12,marginBottom:16,
+          scrollbarWidth:'none',msOverflowStyle:'none'}}>
+          {categories.map(c=>(
+            <CategoryPill key={c.key} cat={c} active={activeCategory===c.key}
+              onClick={()=>setActiveCategory(c.key)} lang={lang}/>
+          ))}
+        </div>
+
+        {/* Region + View toggle */}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
+          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+            {regions.map(r=>(
+              <button key={r} onClick={()=>setActiveRegion(r)}
+                style={{padding:'6px 14px',borderRadius:8,border:'none',cursor:'pointer',fontSize:13,fontWeight:600,
+                  background: activeRegion===r ? 'var(--gray-800)' : 'var(--gray-100)',
+                  color: activeRegion===r ? '#fff' : 'var(--gray-500)',transition:'all .2s'}}>
+                {r === 'All' ? t('Hamısı','All') : r}
+              </button>
+            ))}
+          </div>
+          <div style={{display:'flex',gap:4,background:'var(--gray-100)',borderRadius:8,padding:3}}>
+            {['grid','list'].map(v=>(
+              <button key={v} onClick={()=>setView(v)}
+                style={{padding:'6px 12px',borderRadius:6,border:'none',cursor:'pointer',fontSize:13,
+                  background: view===v ? '#fff' : 'transparent',
+                  color: view===v ? 'var(--gray-800)' : 'var(--gray-400)',
+                  boxShadow: view===v ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',transition:'all .2s'}}>
+                {v==='grid'?'▦':'☰'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Results count */}
+        <div style={{fontSize:14,color:'var(--gray-500)',marginBottom:20}}>
+          {t(`${filtered.length} hakaton tapıldı`,`${filtered.length} hackathon${filtered.length!==1?'s':''} found`)}
+        </div>
+      </div>
+
+      {/* Cards Grid */}
+      <div style={{maxWidth:1280,margin:'0 auto',padding:'0 32px 60px'}}>
+        <div style={{display:'grid',
+          gridTemplateColumns: view==='grid' ? 'repeat(auto-fill,minmax(360px,1fr))' : '1fr',
+          gap:20}}>
+          {filtered.map(h=>(
+            <HackathonCard key={h.id} h={h} lang={lang} onClick={()=>setSelectedHackathon(h)}/>
+          ))}
+        </div>
+        {filtered.length===0 && (
+          <div style={{textAlign:'center',padding:'80px 20px',color:'var(--gray-400)'}}>
+            <div style={{fontSize:48,marginBottom:16}}>🔍</div>
+            <div style={{fontSize:18,fontWeight:600}}>{t('Heç bir nəticə tapılmadı','No results found')}</div>
+            <div style={{fontSize:14,marginTop:8}}>{t('Axtarış filtrlərinizi dəyişdirin','Try adjusting your search or filters')}</div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <footer style={{background:'var(--gray-900)',color:'rgba(255,255,255,0.5)',padding:'32px',textAlign:'center',fontSize:13}}>
+        <div style={{maxWidth:1280,margin:'0 auto'}}>
+          <div style={{color:'#fff',fontSize:16,fontWeight:700,fontFamily:'Space Grotesk',marginBottom:8}}>
+            İRİA — Innovation and Digital Development Agency
+          </div>
+          <div>© 2025 {t('Bütün hüquqlar qorunur','All rights reserved')} | digital.azerbaijan</div>
+        </div>
+      </footer>
+
+      {/* Modal */}
+      {selectedHackathon && <DetailModal h={selectedHackathon} lang={lang} onClose={()=>setSelectedHackathon(null)}/>}
+    </div>
+  );
+}
+
+ReactDOM.render(<App/>, document.getElementById('root'));
+</script>
+</body>
+</html>
